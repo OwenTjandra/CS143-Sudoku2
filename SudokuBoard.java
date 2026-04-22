@@ -35,6 +35,49 @@ public class SudokuBoard
 			System.out.println("Error: File not found");
 		}
 	}
+   
+   public boolean checkData() {
+      Set<Character> validChars = new HashSet<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9','-'));
+      for (int r = 0; r < board.length; r++) {
+         for (int c = 0; c < board[r].length; c++) {
+            if (!validChars.contains(board[r][c])) {
+               return false; 
+            }
+         }
+      }
+      return true; 
+   }
+   
+   public boolean checkRows() {
+      for (int r = 0; r < 9; r++) {
+         Set<Character> number = new HashSet<>();
+         for (int c = 0; c < 9; c++) {
+            char val = (char)board[r][c];
+            if(val != '-' && !number.add(val)){
+               return false;
+            }
+         }
+      }
+      return true;
+   }
+   
+   public boolean checkColumns() {
+      for (int c = 0; c < 9; c++) {
+         Set<Character> number = new HashSet<>();
+         for (int r = 0; r < 9; r++) {
+            char val = (char)board[r][c];
+            if(val != '-' && !number.add(val)){
+               return false;
+            }
+         }
+      }
+      return true;
+   }
+     
+   
+   public boolean isValid(){
+      return checkData() && checkRows() && checkColumns();
+   }
 
 	public String toString()
 	{
