@@ -73,10 +73,40 @@ public class SudokuBoard
       }
       return true;
    }
+   
+   public int[][] miniSquare(int spot) {
+      int[][] mini = new int[3][3];
+      for(int r = 0; r < 3; r++) {
+         for(int c = 0; c < 3; c++) {
+            mini[r][c] = board[(spot - 1) / 3 * 3 + r][(spot - 1) % 3 * 3 + c];
+         }
+      }
+      return mini;
+   }
+   
+   public boolean checkSquares() {
+      for (int spot = 1; spot <= 9; spot++) {
+      int[][] mini = miniSquare(spot);
+      Set<Integer> seen = new HashSet<>();
+      
+      for (int r = 0; r < 3; r++) {
+         for (int c = 0; c < 3; c++) {
+            int val = mini[r][c];
+            if (val != 0) {
+               if (!seen.add(val)) {
+                  return false; 
+               }
+            }
+         }
+      }
+   }
+   return true;
+}
+
      
    
    public boolean isValid(){
-      return checkData() && checkRows() && checkColumns();
+      return checkData() && checkRows() && checkColumns() && checkSquares(); 
    }
 
 	public String toString()
