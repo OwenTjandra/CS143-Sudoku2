@@ -37,24 +37,26 @@ public class SudokuBoard
 	}
    
    public boolean checkData() {
-      Set<Character> validChars = new HashSet<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9','-'));
-      for (int r = 0; r < board.length; r++) {
-         for (int c = 0; c < board[r].length; c++) {
-            if (!validChars.contains(board[r][c])) {
+      for (int r = 0; r < 9; r++) {
+         for (int c = 0; c < 9; c++) {
+            int val = board[r][c];
+            if (val < 0 || val > 9) {
                return false; 
             }
          }
       }
-      return true; 
+   return true; 
    }
    
    public boolean checkRows() {
       for (int r = 0; r < 9; r++) {
-         Set<Character> number = new HashSet<>();
+         Set<Integer> number = new HashSet<>();
          for (int c = 0; c < 9; c++) {
-            char val = (char)board[r][c];
-            if(val != '-' && !number.add(val)){
-               return false;
+            int val = board[r][c];
+            if (val != 0) {
+               if (!number.add(val)) {
+                  return false;
+               }
             }
          }
       }
@@ -63,16 +65,18 @@ public class SudokuBoard
    
    public boolean checkColumns() {
       for (int c = 0; c < 9; c++) {
-         Set<Character> number = new HashSet<>();
+         Set<Integer> number = new HashSet<>();
          for (int r = 0; r < 9; r++) {
-            char val = (char)board[r][c];
-            if(val != '-' && !number.add(val)){
-               return false;
+            int val = board[r][c];
+            if (val != 0) {
+               if (!number.add(val)) {
+                  return false;
+               }
             }
          }
       }
       return true;
-   }
+   }   
    
    public int[][] miniSquare(int spot) {
       int[][] mini = new int[3][3];
@@ -86,28 +90,53 @@ public class SudokuBoard
    
    public boolean checkSquares() {
       for (int spot = 1; spot <= 9; spot++) {
-      int[][] mini = miniSquare(spot);
-      Set<Integer> seen = new HashSet<>();
-      
-      for (int r = 0; r < 3; r++) {
-         for (int c = 0; c < 3; c++) {
-            int val = mini[r][c];
-            if (val != 0) {
-               if (!seen.add(val)) {
-                  return false; 
+         int[][] mini = miniSquare(spot);
+         Set<Integer> seen = new HashSet<>();
+         for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 3; c++) {
+               int val = mini[r][c];
+               if (val != 0) {
+                  if (!seen.add(val)) {
+                     return false; 
+                  }
                }
             }
          }
       }
-   }
    return true;
-}
+   }
 
      
    
    public boolean isValid(){
       return checkData() && checkRows() && checkColumns() && checkSquares(); 
    }
+   
+   public boolean isSolved() {
+    if (!isValid()) {
+        return false;
+    }
+
+    Map<Integer, Integer> counts = new HashMap<>();
+
+    for (int r = 0; r < 9; r++) {
+        for (int c = 0; c < 9; c++) {
+            int val = board[r][c];
+            
+            if (val >= 1 && val <= 9) {
+                counts.put(val, counts.getOrDefault(val, 0) + 1);
+            }
+        }
+    }
+
+    for (int i = 1; i <= 9; i++) {
+        if (!counts.containsKey(i) || counts.get(i) != 9) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 	public String toString()
 	{
