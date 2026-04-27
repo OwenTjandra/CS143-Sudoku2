@@ -4,5 +4,8 @@ public class SudokuGame
 	{
 		SudokuBoard gameBoard = new SudokuBoard("data1.sdk");
 		System.out.println(gameBoard);
+      
+      System.out.println("Is the current layout valid? " + gameBoard.isValid());
+      System.out.println("Is the puzzle fully solved? " + gameBoard.isSolved());
 	}
 }
